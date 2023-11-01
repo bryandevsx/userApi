@@ -14,7 +14,7 @@ function App() {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get('https://reqres.in/api/users');//busca a lista dos usuario com nomes e fotos
+      const response = await axios.get('https://reqres.in/api/users');//busca a lista dos usuário com nomes e fotos
       setUsers(response.data.data);
     } catch (error) {
       console.error('Erro ao obter os usuários:', error);
@@ -23,7 +23,7 @@ function App() {
 
   const createUser = async () => {
     try {
-      const response = await axios.post('https://reqres.in/api/users', newUser);//adicionar usuario novo
+      const response = await axios.post('https://reqres.in/api/users', newUser);//adicionar usuário novo
       console.log('Novo usuário adicionado:', response.data);
       fetchUsers();
       setUsers([...users, response.data]);
@@ -35,7 +35,7 @@ function App() {
   const updateUser = async () => {
     try {
       if (selectedUser) {
-        const updatedUser = await axios.put(`https://reqres.in/api/users/${selectedUser.id}`, selectedUser);//atualizar nome ja existente
+        const updatedUser = await axios.put(`https://reqres.in/api/users/${selectedUser.id}`, selectedUser);//Ao clicar em um nome ja existente ele abre um form e edita o nome.
         console.log('Usuário atualizado:', selectedUser.first_name, selectedUser.last_name);
 
         const updatedUsers = users.map(user => {
