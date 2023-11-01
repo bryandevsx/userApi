@@ -29,9 +29,40 @@ function App() {
       setUsers([...users, response.data]);
     } catch (error) {
       console.error('Erro ao adicionar novo usuário:', error);
-    }
-  };
-  
+    }
+  };
+
+  const updateUser = async () => {
+    try {
+      if (selectedUser) {
+        const updatedUser = await axios.put(`https://reqres.in/api/users/${selectedUser.id}`, selectedUser);//atualizar nome ja existente
+        console.log('Usuário atualizado:', selectedUser.first_name, selectedUser.last_name);
+
+        const updatedUsers = users.map(user => {
+          if (user.id === selectedUser.id) {
+            return updatedUser.data;
+          }
+          return user;
+        });
+
+        setUsers(updatedUsers);
+        fetchUsers();
+        setUpdateMessage(`Usuário ${selectedUser.first_name} ${selectedUser.last_name} atualizado com sucesso!`);
+      }
+    } catch (error) {
+      console.error('Erro ao atualizar o usuário:', error);
+    }
+  };
+
+  const handleSelectUser = (user) => {
+    setSelectedUser(user);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setSelectedUser({ ...selectedUser, [name]: value });
+  };
+
   return (
     <div className="container">
       <h1>Usuários</h1>
