@@ -14,7 +14,7 @@ function App() {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get('https://reqres.in/api/users');//busca a lista dos usuario com nomes e fotos
+      const response = await axios.get('https://reqres.in/api/users');//busca a lista dos usuário com nomes e fotos
       setUsers(response.data.data);
     } catch (error) {
       console.error('Erro ao obter os usuários:', error);
@@ -23,15 +23,46 @@ function App() {
 
   const createUser = async () => {
     try {
-      const response = await axios.post('https://reqres.in/api/users', newUser);//adicionar usuario novo
+      const response = await axios.post('https://reqres.in/api/users', newUser);//adicionar usuário novo
       console.log('Novo usuário adicionado:', response.data);
       fetchUsers();
       setUsers([...users, response.data]);
     } catch (error) {
       console.error('Erro ao adicionar novo usuário:', error);
-    }
-  };
-  
+    }
+  };
+
+  const updateUser = async () => {
+    try {
+      if (selectedUser) {
+        const updatedUser = await axios.put(`https://reqres.in/api/users/${selectedUser.id}`, selectedUser);//Ao clicar em um nome ja existente ele abre um form e edita o nome.
+        console.log('Usuário atualizado:', selectedUser.first_name, selectedUser.last_name);
+
+        const updatedUsers = users.map(user => {
+          if (user.id === selectedUser.id) {
+            return updatedUser.data;
+          }
+          return user;
+        });
+
+        setUsers(updatedUsers);
+        fetchUsers();
+        setUpdateMessage(`Usuário ${selectedUser.first_name} ${selectedUser.last_name} atualizado com sucesso!`);
+      }
+    } catch (error) {
+      console.error('Erro ao atualizar o usuário:', error);
+    }
+  };
+
+  const handleSelectUser = (user) => {
+    setSelectedUser(user);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setSelectedUser({ ...selectedUser, [name]: value });
+  };
+
   return (
     <div className="container">
       <h1>Usuários</h1>
